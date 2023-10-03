@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          Int      @id @default(autoincrement()) // product id
+  name        String // name
+  description String // description of a product
+  sold        Boolean // wether a product is sold
+  activeFrom  DateTime // when a product starts beeng listed  
+
+  imageLinks ImageLink[] @relation("ProductToImageLink") // realation to a set of imageLinks thru the ProductToImageLink groop
+}
+
+model ImageLink {
+  link        String @id // holds the link to an image on an image server 
+  descripiton String // description of chosen image, added in the prosses of adding the picture
+
+  products Product[] @relation("ProductToImageLink") // realation to a set of products thru the ProductToImageLink groop
+}
