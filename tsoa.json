@@ -1,0 +1,13 @@
+{
+    "entryFile": "src/app.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": ["src/controllers/**/**.ts"],
+    "spec": {
+        "outputDirectory": "src",
+        "operationIdTemplate": "{{titleCase controllerName-methodName}}",
+        "specVersion": 3
+    },
+    "routes": {
+        "routesDir": "src"
+    }
+}
