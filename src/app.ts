@@ -1,14 +1,13 @@
-
-import express, {json, urlencoded} from "express";
-import { RegisterRoutes } from "../build/routes";
+import express, { json, urlencoded } from "express";
+import { RegisterRoutes } from "./routes";
 
 export const app = express();
 
 // Use body parser to read sent json payloads
 app.use(
-  urlencoded({
-    extended: true,
-  })
+    urlencoded({
+        extended: true,
+    }),
 );
 app.use(json());
 

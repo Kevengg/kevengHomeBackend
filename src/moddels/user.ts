@@ -4,4 +4,4 @@ export default interface User {
     name: string;
     status?: "Happy" | "Sad";
     phoneNumbers: string[];
-  }
+}
