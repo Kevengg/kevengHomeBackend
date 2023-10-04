@@ -22,3 +22,7 @@ app.use(
         res.send(swaggerUi.generateHTML(await import("./swagger.json")));
     }),
 );
+
+app.use((req: Request, res: Response) => {
+    return res.status(404).json({ message: "Not Found" });
+});
