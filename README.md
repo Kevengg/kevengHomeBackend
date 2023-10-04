@@ -20,6 +20,10 @@ To make a bakend to handle serving of "products" and other items
 
 -   [Prettier](https://prettier.io)
 
+-   [Concurrently](https://github.com/open-cli-tools/concurrently#readme)
+
+-   [Nodemon](https://nodemon.io)
+
 ### tools
 
 -   [date-fns](https://date-fns.org)
@@ -30,3 +34,7 @@ To make a bakend to handle serving of "products" and other items
 -   `npm start` // starts the local server on the port defined at env.PORT alternatively port 3000
 -   `npm run format` // format all documents not spesefied in .prettierignore
 -   `npm run format:check` // check for format errors in all documents not spesefied in .prettierignore
+
+## Documentation
+
+We are using Swagger for dokumentation of endpoints, this shuld be running on `/swagger`.This includes endopnts and response moddels
