@@ -1,5 +1,7 @@
-import express, { json, urlencoded } from "express";
+import express, { urlencoded, Request, Response } from "express";
 import { RegisterRoutes } from "./routes";
+import swaggerUi from "swagger-ui-express";
+import asyncRouteHandler from "./utilities/asyncRouteHandler";
 
 export const app = express();
 
@@ -9,6 +11,14 @@ app.use(
         extended: true,
     }),
 );
-app.use(json());
+app.use(express.json());
 
 RegisterRoutes(app);
+
+app.use(
+    "/swagger",
+    swaggerUi.serve,
+    asyncRouteHandler(async (_: Request, res: Response) => {
+        res.send(swaggerUi.generateHTML(await import("./swagger.json")));
+    }),
+);
