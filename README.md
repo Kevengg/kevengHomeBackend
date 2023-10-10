@@ -10,7 +10,7 @@ To make a bakend to handle serving of "products" and other items
 
 -   [ ] endpoints for modifying and adding data in the database
 
--   [ ] handeling of autenticaton to prevent unvanted modificaton of tabeles
+-   [ ] handeling of autenticaton to prevent unwanted modificaton of tabeles
 
 ## Technology
 
@@ -28,6 +28,8 @@ To make a bakend to handle serving of "products" and other items
 
 -   [date-fns](https://date-fns.org)
 
+-   [Swagger](https://swagger.io/tools/swagger-ui/)
+
 ## Scripts
 
 -   `npm run build` // builds tsoa, routes and tsc
@@ -37,4 +39,4 @@ To make a bakend to handle serving of "products" and other items
 
 ## Documentation
 
-We are using Swagger for dokumentation of endpoints, this shuld be running on `/swagger`.This includes endopnts and response moddels
+We are using Swagger for dokumentation of endpoints, this shuld be running on `/swagger`.This includes endponts and response moddels
