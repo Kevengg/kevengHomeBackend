@@ -6,22 +6,6 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"ErrorReturn": {
-				"properties": {
-					"error": {
-						"type": "number",
-						"format": "double"
-					},
-					"errorMsg": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"error"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_": {
 				"properties": {
 					"descripiton": {
@@ -53,8 +37,54 @@
 					"description": {
 						"type": "string"
 					},
+					"sold": {
+						"type": "boolean"
+					},
+					"activeFrom": {
+						"type": "string",
+						"format": "date-time"
+					},
 					"imageLinks": {
-						"$ref": "#/components/schemas/ImageLink"
+						"items": {
+							"$ref": "#/components/schemas/ImageLink"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"sold",
+					"activeFrom",
+					"imageLinks"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ErrorReturn": {
+				"properties": {
+					"error": {
+						"type": "number",
+						"format": "double"
+					},
+					"errorMsg": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"error"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterProductBody": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
 					},
 					"sold": {
 						"type": "boolean"
@@ -65,10 +95,8 @@
 					}
 				},
 				"required": [
-					"id",
 					"name",
 					"description",
-					"imageLinks",
 					"sold",
 					"activeFrom"
 				],
@@ -128,10 +156,13 @@
 								"schema": {
 									"anyOf": [
 										{
-											"$ref": "#/components/schemas/ErrorReturn"
+											"items": {
+												"$ref": "#/components/schemas/Product"
+											},
+											"type": "array"
 										},
 										{
-											"$ref": "#/components/schemas/Product"
+											"$ref": "#/components/schemas/ErrorReturn"
 										}
 									]
 								}
@@ -141,6 +172,40 @@
 				},
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/post/product/new": {
+			"post": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegisterProductBody"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

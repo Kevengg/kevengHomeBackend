@@ -6,20 +6,13 @@ import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, H
 import { pingController } from './controllers/ping/pingController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AllProducts } from './controllers/products/allProductsController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { RegisterProduct } from './controllers/products/registerProduct';
 import type { RequestHandler, Router } from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "ErrorReturn": {
-        "dataType": "refObject",
-        "properties": {
-            "error": {"dataType":"double","required":true},
-            "errorMsg": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"descripiton":{"dataType":"string","required":true},"link":{"dataType":"string","required":true}},"validators":{}},
@@ -36,7 +29,27 @@ const models: TsoaRoute.Models = {
             "id": {"dataType":"double","required":true},
             "name": {"dataType":"string","required":true},
             "description": {"dataType":"string","required":true},
-            "imageLinks": {"ref":"ImageLink","required":true},
+            "sold": {"dataType":"boolean","required":true},
+            "activeFrom": {"dataType":"datetime","required":true},
+            "imageLinks": {"dataType":"array","array":{"dataType":"refAlias","ref":"ImageLink"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ErrorReturn": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"double","required":true},
+            "errorMsg": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "RegisterProductBody": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
             "sold": {"dataType":"boolean","required":true},
             "activeFrom": {"dataType":"datetime","required":true},
         },
@@ -95,6 +108,31 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.allProducts.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/post/product/new',
+            ...(fetchMiddlewares<RequestHandler>(RegisterProduct)),
+            ...(fetchMiddlewares<RequestHandler>(RegisterProduct.prototype.register)),
+
+            function RegisterProduct_register(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"ref":"RegisterProductBody"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new RegisterProduct();
+
+
+              const promise = controller.register.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

@@ -24,6 +24,8 @@ To make a bakend to handle serving of "products" and other items
 
 -   [Nodemon](https://nodemon.io)
 
+-   [dotenv](https://www.npmjs.com/package/dotenv#-install)
+
 ### tools
 
 -   [date-fns](https://date-fns.org)

@@ -1,16 +1,18 @@
 import express, { urlencoded, Request, Response } from "express";
 import { RegisterRoutes } from "./routes";
 import swaggerUi from "swagger-ui-express";
+import dotenv from "dotenv";
 import asyncRouteHandler from "./utilities/asyncRouteHandler";
+const cors = require("cors");
 
-export const app = express();
+const corsConfig = { origin: ["http://localhost:3000"] };
 
-// Use body parser to read sent json payloads
-app.use(
-    urlencoded({
-        extended: true,
-    }),
-);
+dotenv.config();
+
+const app = express();
+
+app.use(cors(corsConfig));
+
 app.use(express.json());
 
 RegisterRoutes(app);
@@ -26,3 +28,5 @@ app.use(
 app.use((req: Request, res: Response) => {
     return res.status(404).json({ message: "Not Found" });
 });
+
+export default app;

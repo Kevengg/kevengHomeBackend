@@ -17,6 +17,7 @@ model Product {
   description String // description of a product
   sold        Boolean // wether a product is sold
   activeFrom  DateTime // when a product starts beeng listed  
+  created     DateTime @default(now()) // when the product was created
 
   imageLinks ImageLink[] @relation("ProductToImageLink") // realation to a set of imageLinks thru the ProductToImageLink groop
 }
