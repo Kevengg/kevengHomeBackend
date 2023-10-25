@@ -89,16 +89,29 @@
 					"sold": {
 						"type": "boolean"
 					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"listPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"soldPrice": {
+						"type": "number",
+						"format": "double"
+					},
 					"activeFrom": {
 						"type": "string",
 						"format": "date-time"
+					},
+					"priceBreakdown": {
+						"type": "string"
 					}
 				},
 				"required": [
 					"name",
-					"description",
-					"sold",
-					"activeFrom"
+					"description"
 				],
 				"type": "object",
 				"additionalProperties": false

@@ -5,8 +5,12 @@ import { db } from "../../db";
 interface RegisterProductBody {
     name: string;
     description: string;
-    sold: boolean;
-    activeFrom: Date;
+    sold?: boolean;
+    price?: number;
+    listPrice?: number;
+    soldPrice?: number;
+    activeFrom?: Date;
+    priceBreakdown?: string;
 }
 
 @Route("/post/product")
@@ -19,8 +23,8 @@ export class RegisterProduct extends Controller {
             data: {
                 name: body.name,
                 description: body.description,
-                sold: body.sold,
-                activeFrom: body.activeFrom,
+                sold: body.sold || false,
+                activeFrom: body.activeFrom || new Date(0),
             },
         });
 
