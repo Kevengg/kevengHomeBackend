@@ -5,22 +5,24 @@ import { db } from "../../db";
 interface RegisterProductBody {
     name: string;
     description: string;
+    price?: number;
+    listPrice?: number;
+    soldPrice?: number;
     sold: boolean;
-    activeFrom: Date;
+    soldAt?: string;
+    activeFrom?: string;
+    priceBreakdown?: string;
 }
 
-@Route("/post/product")
+@Route("/post")
 export class RegisterProduct extends Controller {
-    @Post("/new")
+    @Post("/product")
     public async register(
         @Body() body: RegisterProductBody,
     ): Promise<unknown | ErrorReturn> {
         const dbRetun = await db.product.create({
             data: {
-                name: body.name,
-                description: body.description,
-                sold: body.sold,
-                activeFrom: body.activeFrom,
+                ...body,
             },
         });
 

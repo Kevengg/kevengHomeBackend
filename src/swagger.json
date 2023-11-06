@@ -6,58 +6,20 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_": {
+			"ProductToImageBoddy": {
 				"properties": {
-					"descripiton": {
-						"type": "string"
-					},
-					"link": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"descripiton",
-					"link"
-				],
-				"type": "object"
-			},
-			"ImageLink": {
-				"$ref": "#/components/schemas/%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_",
-				"description": "Model ImageLink"
-			},
-			"Product": {
-				"properties": {
-					"id": {
+					"ProductID": {
 						"type": "number",
 						"format": "double"
 					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"sold": {
-						"type": "boolean"
-					},
-					"activeFrom": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"imageLinks": {
-						"items": {
-							"$ref": "#/components/schemas/ImageLink"
-						},
-						"type": "array"
+					"ImageID": {
+						"type": "number",
+						"format": "double"
 					}
 				},
 				"required": [
-					"id",
-					"name",
-					"description",
-					"sold",
-					"activeFrom",
-					"imageLinks"
+					"ProductID",
+					"ImageID"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -78,6 +40,118 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"RegisterImageBody": {
+				"properties": {
+					"link": {
+						"type": "string"
+					},
+					"descripiton": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"link",
+					"descripiton"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_": {
+				"properties": {
+					"descripiton": {
+						"type": "string"
+					},
+					"link": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"descripiton",
+					"link",
+					"id"
+				],
+				"type": "object"
+			},
+			"ImageLink": {
+				"$ref": "#/components/schemas/%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_",
+				"description": "Model ImageLink"
+			},
+			"Product": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"listPrice": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"soldPrice": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"sold": {
+						"type": "boolean"
+					},
+					"soldAt": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"activeFrom": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"created": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"priceBreakdown": {
+						"type": "string",
+						"nullable": true
+					},
+					"ImageLinks": {
+						"items": {
+							"$ref": "#/components/schemas/ImageLink"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"price",
+					"listPrice",
+					"soldPrice",
+					"sold",
+					"soldAt",
+					"activeFrom",
+					"created",
+					"priceBreakdown",
+					"ImageLinks"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"RegisterProductBody": {
 				"properties": {
 					"name": {
@@ -86,19 +160,35 @@
 					"description": {
 						"type": "string"
 					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"listPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"soldPrice": {
+						"type": "number",
+						"format": "double"
+					},
 					"sold": {
 						"type": "boolean"
 					},
+					"soldAt": {
+						"type": "string"
+					},
 					"activeFrom": {
-						"type": "string",
-						"format": "date-time"
+						"type": "string"
+					},
+					"priceBreakdown": {
+						"type": "string"
 					}
 				},
 				"required": [
 					"name",
 					"description",
-					"sold",
-					"activeFrom"
+					"sold"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -118,6 +208,67 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
+		"/relationship/product/image": {
+			"post": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ProductToImageBoddy"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/post/image": {
+			"post": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegisterImageBody"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/ping": {
 			"get": {
 				"operationId": "",
@@ -174,7 +325,7 @@
 				"parameters": []
 			}
 		},
-		"/post/product/new": {
+		"/post/product": {
 			"post": {
 				"operationId": "",
 				"responses": {

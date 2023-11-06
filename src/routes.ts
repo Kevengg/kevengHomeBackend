@@ -3,6 +3,10 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, HttpStatusCodeLiteral, TsoaResponse, fetchMiddlewares } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { AddRealationship } from './controllers/images/addRealation';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { RegisterPost } from './controllers/images/registerImage';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { pingController } from './controllers/ping/pingController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AllProducts } from './controllers/products/allProductsController';
@@ -13,25 +17,11 @@ import type { RequestHandler, Router } from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"descripiton":{"dataType":"string","required":true},"link":{"dataType":"string","required":true}},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ImageLink": {
-        "dataType": "refAlias",
-        "type": {"ref":"%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Product": {
+    "ProductToImageBoddy": {
         "dataType": "refObject",
         "properties": {
-            "id": {"dataType":"double","required":true},
-            "name": {"dataType":"string","required":true},
-            "description": {"dataType":"string","required":true},
-            "sold": {"dataType":"boolean","required":true},
-            "activeFrom": {"dataType":"datetime","required":true},
-            "imageLinks": {"dataType":"array","array":{"dataType":"refAlias","ref":"ImageLink"},"required":true},
+            "ProductID": {"dataType":"double","required":true},
+            "ImageID": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -45,13 +35,56 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "RegisterImageBody": {
+        "dataType": "refObject",
+        "properties": {
+            "link": {"dataType":"string","required":true},
+            "descripiton": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"descripiton":{"dataType":"string","required":true},"link":{"dataType":"string","required":true},"id":{"dataType":"double","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ImageLink": {
+        "dataType": "refAlias",
+        "type": {"ref":"%24Result.DefaultSelection_Prisma.%24ImageLinkPayload_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Product": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "name": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
+            "price": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"enum","enums":[null]}],"required":true},
+            "listPrice": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"enum","enums":[null]}],"required":true},
+            "soldPrice": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"enum","enums":[null]}],"required":true},
+            "sold": {"dataType":"boolean","required":true},
+            "soldAt": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"enum","enums":[null]}],"required":true},
+            "activeFrom": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"enum","enums":[null]}],"required":true},
+            "created": {"dataType":"datetime","required":true},
+            "priceBreakdown": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}],"required":true},
+            "ImageLinks": {"dataType":"array","array":{"dataType":"refAlias","ref":"ImageLink"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "RegisterProductBody": {
         "dataType": "refObject",
         "properties": {
             "name": {"dataType":"string","required":true},
             "description": {"dataType":"string","required":true},
+            "price": {"dataType":"double"},
+            "listPrice": {"dataType":"double"},
+            "soldPrice": {"dataType":"double"},
             "sold": {"dataType":"boolean","required":true},
-            "activeFrom": {"dataType":"datetime","required":true},
+            "soldAt": {"dataType":"string"},
+            "activeFrom": {"dataType":"string"},
+            "priceBreakdown": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -66,6 +99,56 @@ export function RegisterRoutes(app: Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
+        app.post('/relationship/product/image',
+            ...(fetchMiddlewares<RequestHandler>(AddRealationship)),
+            ...(fetchMiddlewares<RequestHandler>(AddRealationship.prototype.productToImage)),
+
+            function AddRealationship_productToImage(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"ref":"ProductToImageBoddy"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new AddRealationship();
+
+
+              const promise = controller.productToImage.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/post/image',
+            ...(fetchMiddlewares<RequestHandler>(RegisterPost)),
+            ...(fetchMiddlewares<RequestHandler>(RegisterPost.prototype.register)),
+
+            function RegisterPost_register(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"ref":"RegisterImageBody"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new RegisterPost();
+
+
+              const promise = controller.register.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/ping',
             ...(fetchMiddlewares<RequestHandler>(pingController)),
             ...(fetchMiddlewares<RequestHandler>(pingController.prototype.get)),
@@ -114,7 +197,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/post/product/new',
+        app.post('/post/product',
             ...(fetchMiddlewares<RequestHandler>(RegisterProduct)),
             ...(fetchMiddlewares<RequestHandler>(RegisterProduct.prototype.register)),
 
