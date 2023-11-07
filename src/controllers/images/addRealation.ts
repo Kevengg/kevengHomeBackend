@@ -73,7 +73,11 @@ export class AddRealationship extends Controller {
             },
         });
 
-        return dbRetun;
+        if (dbRetun.id === body.ProductID) {
+            return { statusbar: "success" };
+        } else {
+            return { statusbar: "error" };
+        }
     }
     @Post("product/images/")
     public async productToImages(
@@ -143,6 +147,10 @@ export class AddRealationship extends Controller {
             },
         });
 
-        return dbRetun;
+        if (dbRetun.id === body.ProductID) {
+            return { statusbar: "success" };
+        } else {
+            return { statusbar: "error" };
+        }
     }
 }
