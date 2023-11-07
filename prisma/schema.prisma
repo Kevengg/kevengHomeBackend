@@ -11,7 +11,7 @@ model ImageLink {
   id          Int       @id @default(autoincrement())
   link        String
   descripiton String
-  Product     Product[] @relation("ImageLinkToProduct")
+  Product     Product[]
 }
 
 model Product {
@@ -27,5 +27,5 @@ model Product {
   created        DateTime    @default(now())
   priceBreakdown String?
   deleted        Boolean     @default(false)
-  ImageLinks     ImageLink[] @relation("ImageLinkToProduct")
+  ImageLink      ImageLink[]
 }
