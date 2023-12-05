@@ -20,6 +20,12 @@ import { AllProducts } from './controllers/products/allProductsController';
 import { EditProduct } from './controllers/products/edditProduct';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { RegisterProduct } from './controllers/products/registerProduct';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { AllWoodTypes } from './controllers/products/woodTypes/allWoodTypes';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { EditWoodTypes } from './controllers/products/woodTypes/edditWoodType';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { RegisterWoodType } from './controllers/products/woodTypes/registerWoodTypes';
 import type { RequestHandler, Router } from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -134,6 +140,42 @@ const models: TsoaRoute.Models = {
             "activeFrom": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"any"}]},
             "priceBreakdown": {"dataType":"string"},
             "images": {"dataType":"array","array":{"dataType":"double"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "EditWoodTypesBody": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "basePrise": {"dataType":"double"},
+            "widthMultiplier": {"dataType":"double"},
+            "lengthMultiplier": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "EditWoodTypesImagesBody": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "images": {"dataType":"array","array":{"dataType":"double"},"required":true},
+            "remove": {"dataType":"boolean"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "RegisterWoodTypeBody": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
+            "basePrise": {"dataType":"double"},
+            "widthMultiplier": {"dataType":"double","required":true},
+            "lengthMultiplier": {"dataType":"double","required":true},
+            "imageIds": {"dataType":"array","array":{"dataType":"double"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -417,6 +459,108 @@ export function RegisterRoutes(app: Router) {
                 validatedArgs = getValidatedArgs(args, request, response);
 
                 const controller = new RegisterProduct();
+
+
+              const promise = controller.register.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/woodtypes/all',
+            ...(fetchMiddlewares<RequestHandler>(AllWoodTypes)),
+            ...(fetchMiddlewares<RequestHandler>(AllWoodTypes.prototype.allWoodTypes)),
+
+            function AllWoodTypes_allWoodTypes(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new AllWoodTypes();
+
+
+              const promise = controller.allWoodTypes.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/edit/woodtypes',
+            ...(fetchMiddlewares<RequestHandler>(EditWoodTypes)),
+            ...(fetchMiddlewares<RequestHandler>(EditWoodTypes.prototype.editWoodTypes)),
+
+            function EditWoodTypes_editWoodTypes(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"ref":"EditWoodTypesBody"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new EditWoodTypes();
+
+
+              const promise = controller.editWoodTypes.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/edit/woodtypes/images',
+            ...(fetchMiddlewares<RequestHandler>(EditWoodTypes)),
+            ...(fetchMiddlewares<RequestHandler>(EditWoodTypes.prototype.editWoodTypeImages)),
+
+            function EditWoodTypes_editWoodTypeImages(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"ref":"EditWoodTypesImagesBody"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new EditWoodTypes();
+
+
+              const promise = controller.editWoodTypeImages.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/post/woodtype',
+            ...(fetchMiddlewares<RequestHandler>(RegisterWoodType)),
+            ...(fetchMiddlewares<RequestHandler>(RegisterWoodType.prototype.register)),
+
+            function RegisterWoodType_register(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"ref":"RegisterWoodTypeBody"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new RegisterWoodType();
 
 
               const promise = controller.register.apply(controller, validatedArgs as any);

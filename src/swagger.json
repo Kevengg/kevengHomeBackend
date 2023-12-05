@@ -287,6 +287,99 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"EditWoodTypesBody": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"basePrise": {
+						"type": "number",
+						"format": "double"
+					},
+					"widthMultiplier": {
+						"type": "number",
+						"format": "double"
+					},
+					"lengthMultiplier": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EditWoodTypesImagesBody": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"images": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"remove": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"id",
+					"images"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterWoodTypeBody": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"basePrise": {
+						"type": "number",
+						"format": "double"
+					},
+					"widthMultiplier": {
+						"type": "number",
+						"format": "double"
+					},
+					"lengthMultiplier": {
+						"type": "number",
+						"format": "double"
+					},
+					"imageIds": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"name",
+					"description",
+					"widthMultiplier",
+					"lengthMultiplier",
+					"imageIds"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -522,17 +615,10 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"anyOf": [
-										{
-											"items": {
-												"$ref": "#/components/schemas/ImageLink"
-											},
-											"type": "array"
-										},
-										{
-											"$ref": "#/components/schemas/ErrorReturn"
-										}
-									]
+									"items": {
+										"$ref": "#/components/schemas/ImageLink"
+									},
+									"type": "array"
 								}
 							}
 						}
@@ -723,6 +809,140 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/RegisterProductBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/woodtypes/all": {
+			"get": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"get"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/edit/woodtypes": {
+			"put": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"edit wood types"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/EditWoodTypesBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/edit/woodtypes/images": {
+			"put": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"edit wood types"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/EditWoodTypesImagesBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/post/woodtype": {
+			"post": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"register"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegisterWoodTypeBody"
 							}
 						}
 					}
