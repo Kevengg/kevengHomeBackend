@@ -19,6 +19,7 @@ model ImageLinkConnection {
   imageLink   ImageLink  @relation(fields: [imageLinkId], references: [id])
   woodType    WoodType[]
   product     Product[]
+  Stain       Stain[]
 }
 
 model Product {
@@ -65,4 +66,14 @@ model WoodType {
   widthMultiplier  Decimal               @default(1.25)
   lengthMultiplier Decimal               @default(1.25)
   images           ImageLinkConnection[]
+  stains           Stain[]
+}
+
+model Stain {
+  id               Int                   @id @default(autoincrement())
+  name             String
+  description      String                @default("")
+  priceSquareMeter Decimal
+  images           ImageLinkConnection[]
+  woodTypes        WoodType[]
 }
