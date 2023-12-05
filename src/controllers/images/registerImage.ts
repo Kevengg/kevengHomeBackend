@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Route } from "tsoa";
+import { Body, Controller, Post, Route, Tags } from "tsoa";
 import ErrorReturn from "../../moddels/errorReturn";
 import { db } from "../../db";
 
@@ -10,6 +10,7 @@ interface RegisterImageBody {
 @Route("post/")
 export class RegisterPost extends Controller {
     @Post("image/")
+    @Tags("register")
     public async register(
         @Body() body: RegisterImageBody,
     ): Promise<unknown | ErrorReturn> {

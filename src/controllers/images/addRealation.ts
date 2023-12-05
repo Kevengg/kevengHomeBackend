@@ -1,6 +1,8 @@
-import { Body, Controller, Post, Route } from "tsoa";
+import { Body, Controller, Put, Route, Tags, Request, Query } from "tsoa";
 import { db } from "../../db";
 import ErrorReturn from "../../moddels/errorReturn";
+import { Request as ExpressRequest } from "express";
+import handleError from "../../utilities/handleError";
 
 interface ProductToImageBoddy {
     ProductID: number;
@@ -11,31 +13,32 @@ interface ProductToImagesBoddy {
     ImageIDs: number[];
 }
 
-@Route("relationship/")
+@Route("edit/")
 export class AddRealationship extends Controller {
-    @Post("product/image/")
+    @Put("product/image/")
+    @Tags("edit products")
     public async productToImage(
         @Body() body: ProductToImageBoddy,
-    ): Promise<unknown> {
+        @Request() request: ExpressRequest,
+    ): Promise<{ statusbar: "success" } | ErrorReturn> {
+        const err = (error: ErrorReturn) =>
+            handleError(this, error, "productToImage", request);
+
         // check if a product id was provided
         if (!body.ProductID) {
-            const error: ErrorReturn = {
+            return err({
                 error: 401,
                 errorMsg: "Please provide id of a product to link an image to",
-            };
-            this.setStatus(error.error);
-            return error;
+            });
         }
 
         // check if a link to an image was provided
         if (!body.ImageID) {
-            const error: ErrorReturn = {
+            return err({
                 error: 401,
                 errorMsg:
                     "Please provide the link of a image to link to a product",
-            };
-            this.setStatus(error.error);
-            return error;
+            });
         }
 
         // check if the selected product exists
@@ -43,32 +46,28 @@ export class AddRealationship extends Controller {
             where: { id: { equals: body.ProductID } },
         });
         if (!selectedProduct) {
-            const error: ErrorReturn = {
+            return err({
                 error: 404,
                 errorMsg: "No product with provided id was found",
-            };
-            this.setStatus(error.error);
-            return error;
+            });
         }
 
         // check if the selected image exists
-        const selectedImage = await db.product.findFirst({
+        const selectedImage = await db.imageLink.findFirst({
             where: { id: { equals: body.ImageID } },
         });
         if (!selectedImage) {
-            const error: ErrorReturn = {
+            return err({
                 error: 404,
                 errorMsg: "No image with provided id was found",
-            };
-            this.setStatus(error.error);
-            return error;
+            });
         }
 
         const dbRetun = await db.product.update({
             where: { id: body.ProductID },
             data: {
                 ImageLinks: {
-                    connect: { id: body.ImageID },
+                    connect: { imageLinkId: body.ImageID },
                 },
             },
         });
@@ -76,66 +75,112 @@ export class AddRealationship extends Controller {
         if (dbRetun.id === body.ProductID) {
             return { statusbar: "success" };
         } else {
-            return { statusbar: "error" };
+            return err({
+                error: 400,
+                errorMsg: "Something whent wrong",
+            });
         }
     }
-    @Post("product/images/")
+    @Put("product/images/")
+    @Tags("edit products")
     public async productToImages(
         @Body() body: ProductToImagesBoddy,
-    ): Promise<unknown> {
+        @Query() remove: boolean = false,
+        @Request() request: ExpressRequest,
+    ): Promise<{ statusbar: "success" } | ErrorReturn> {
+        const err = (error: ErrorReturn) =>
+            handleError(this, error, "productToImages", request);
+
         // check if a product id was provided
         if (!body.ProductID) {
-            const error: ErrorReturn = {
+            return err({
                 error: 401,
                 errorMsg: "Please provide id of a product to link an image to",
-            };
-            this.setStatus(error.error);
-            return error;
+            });
         }
 
         // check if a link to an image was provided
         if (!body.ImageIDs.length) {
-            const error: ErrorReturn = {
+            return err({
                 error: 401,
                 errorMsg:
                     "Please provide atleast one link of an image to link to a product",
-            };
-            this.setStatus(error.error);
-            return error;
+            });
         }
 
         // check if the selected product exists
         const selectedProduct = await db.product.findFirst({
             where: { id: { equals: body.ProductID } },
+            include: { ImageLinks: true },
         });
         if (!selectedProduct) {
-            const error: ErrorReturn = {
+            return err({
                 error: 404,
                 errorMsg: "No product with provided id was found",
-            };
-            this.setStatus(error.error);
-            return error;
+            });
         }
 
         // check if the selected image exists
-        const selectedImage = await db.product.findMany({
+        const selectedImages = await db.imageLink.findMany({
             where: { id: { in: body.ImageIDs } },
         });
-        if (selectedImage.length !== body.ImageIDs.length) {
-            const error: ErrorReturn = {
+
+        if (selectedImages.length !== body.ImageIDs.length) {
+            return err({
                 error: 404,
                 errorMsg: "No image with provided id was found",
-            };
-            this.setStatus(error.error);
-            return error;
+            });
+        }
+
+        if (remove) {
+            // check if the selected image is linked to the selected product
+            const areInProduct = selectedProduct.ImageLinks.map((image) =>
+                body.ImageIDs.includes(image.imageLinkId),
+            ).reduce((prew, current) => {
+                return current ? [...prew, current] : prew;
+            }, [] as boolean[]);
+
+            if (areInProduct.length !== body.ImageIDs.length) {
+                return err({
+                    error: 404,
+                    errorMsg:
+                        "One or more if the provided images do not exist on the product",
+                });
+            }
+
+            // create the array for disconnect
+            const connectArr = body.ImageIDs.reduce(
+                (prev, current) => {
+                    return [...prev, { imageLinkId: current }];
+                },
+                [] as { imageLinkId: number }[],
+            );
+
+            const dbRetun = await db.product.update({
+                where: { id: body.ProductID },
+                data: {
+                    ImageLinks: {
+                        disconnect: connectArr,
+                    },
+                },
+            });
+
+            if (dbRetun.id === body.ProductID) {
+                return { statusbar: "success" };
+            } else {
+                return err({
+                    error: 400,
+                    errorMsg: "Something whent wrong",
+                });
+            }
         }
 
         // create the array for connect
         const connectArr = body.ImageIDs.reduce(
             (prev, current) => {
-                return [...prev, { id: current }];
+                return [...prev, { imageLinkId: current }];
             },
-            [] as { id: number }[],
+            [] as { imageLinkId: number }[],
         );
 
         const dbRetun = await db.product.update({
@@ -150,7 +195,10 @@ export class AddRealationship extends Controller {
         if (dbRetun.id === body.ProductID) {
             return { statusbar: "success" };
         } else {
-            return { statusbar: "error" };
+            return err({
+                error: 400,
+                errorMsg: "Something whent wrong",
+            });
         }
     }
 }

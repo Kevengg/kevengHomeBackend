@@ -3,15 +3,21 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, HttpStatusCodeLiteral, TsoaResponse, fetchMiddlewares } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { GetKnownErrors } from './controllers/healthCheck/errorHandeling/getKnownErrors';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { pingController } from './controllers/healthCheck/pingController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AddRealationship } from './controllers/images/addRealation';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AllImages } from './controllers/images/allImages';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { GetImage } from './controllers/images/getImage';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { RegisterPost } from './controllers/images/registerImage';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { pingController } from './controllers/ping/pingController';
-// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AllProducts } from './controllers/products/allProductsController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { EditProduct } from './controllers/products/edditProduct';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { RegisterProduct } from './controllers/products/registerProduct';
 import type { RequestHandler, Router } from 'express';
@@ -19,6 +25,15 @@ import type { RequestHandler, Router } from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "ErrorReturn": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"double","required":true},
+            "errorMsg": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ProductToImageBoddy": {
         "dataType": "refObject",
         "properties": {
@@ -47,20 +62,19 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ErrorReturn": {
-        "dataType": "refObject",
-        "properties": {
-            "error": {"dataType":"double","required":true},
-            "errorMsg": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "RegisterImageBody": {
         "dataType": "refObject",
         "properties": {
             "link": {"dataType":"string","required":true},
             "descripiton": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ImageLinkConnection": {
+        "dataType": "refObject",
+        "properties": {
+            "imageLink": {"ref":"ImageLink","required":true},
         },
         "additionalProperties": false,
     },
@@ -79,7 +93,30 @@ const models: TsoaRoute.Models = {
             "activeFrom": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"enum","enums":[null]}],"required":true},
             "created": {"dataType":"datetime","required":true},
             "priceBreakdown": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}],"required":true},
-            "ImageLinks": {"dataType":"array","array":{"dataType":"refObject","ref":"ImageLink"},"required":true},
+            "ImageConnections": {"dataType":"array","array":{"dataType":"refObject","ref":"ImageLinkConnection"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ProductEditResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "before": {"ref":"Product","required":true},
+            "after": {"ref":"Product","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IEditProduct": {
+        "dataType": "refObject",
+        "properties": {
+            "ProductID": {"dataType":"double","required":true},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "price": {"dataType":"double"},
+            "listPrice": {"dataType":"double"},
+            "activeFrom": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"enum","enums":[null]}]},
+            "deleted": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -93,9 +130,10 @@ const models: TsoaRoute.Models = {
             "listPrice": {"dataType":"double"},
             "soldPrice": {"dataType":"double"},
             "sold": {"dataType":"boolean","required":true},
-            "soldAt": {"dataType":"string"},
-            "activeFrom": {"dataType":"string"},
+            "soldAt": {"dataType":"datetime"},
+            "activeFrom": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"any"}]},
             "priceBreakdown": {"dataType":"string"},
+            "images": {"dataType":"array","array":{"dataType":"double"}},
         },
         "additionalProperties": false,
     },
@@ -110,13 +148,88 @@ export function RegisterRoutes(app: Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.post('/relationship/product/image',
+        app.get('/errors/known/count',
+            ...(fetchMiddlewares<RequestHandler>(GetKnownErrors)),
+            ...(fetchMiddlewares<RequestHandler>(GetKnownErrors.prototype.knownErrorCount)),
+
+            function GetKnownErrors_knownErrorCount(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GetKnownErrors();
+
+
+              const promise = controller.knownErrorCount.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/errors/known/:page',
+            ...(fetchMiddlewares<RequestHandler>(GetKnownErrors)),
+            ...(fetchMiddlewares<RequestHandler>(GetKnownErrors.prototype.getKnownErrors)),
+
+            function GetKnownErrors_getKnownErrors(request: any, response: any, next: any) {
+            const args = {
+                    page: {"in":"path","name":"page","required":true,"dataType":"double"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GetKnownErrors();
+
+
+              const promise = controller.getKnownErrors.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/ping',
+            ...(fetchMiddlewares<RequestHandler>(pingController)),
+            ...(fetchMiddlewares<RequestHandler>(pingController.prototype.get)),
+
+            function pingController_get(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new pingController();
+
+
+              const promise = controller.get.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/edit/product/image',
             ...(fetchMiddlewares<RequestHandler>(AddRealationship)),
             ...(fetchMiddlewares<RequestHandler>(AddRealationship.prototype.productToImage)),
 
             function AddRealationship_productToImage(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"ref":"ProductToImageBoddy"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -135,13 +248,15 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/relationship/product/images',
+        app.put('/edit/product/images',
             ...(fetchMiddlewares<RequestHandler>(AddRealationship)),
             ...(fetchMiddlewares<RequestHandler>(AddRealationship.prototype.productToImages)),
 
             function AddRealationship_productToImages(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"ref":"ProductToImagesBoddy"},
+                    remove: {"default":false,"in":"query","name":"remove","dataType":"boolean"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -184,6 +299,32 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/images/:img',
+            ...(fetchMiddlewares<RequestHandler>(GetImage)),
+            ...(fetchMiddlewares<RequestHandler>(GetImage.prototype.getImage)),
+
+            function GetImage_getImage(request: any, response: any, next: any) {
+            const args = {
+                    img: {"in":"path","name":"img","required":true,"dataType":"double"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GetImage();
+
+
+              const promise = controller.getImage.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/post/image',
             ...(fetchMiddlewares<RequestHandler>(RegisterPost)),
             ...(fetchMiddlewares<RequestHandler>(RegisterPost.prototype.register)),
@@ -203,30 +344,6 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.register.apply(controller, validatedArgs as any);
-              promiseHandler(controller, promise, response, undefined, next);
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/ping',
-            ...(fetchMiddlewares<RequestHandler>(pingController)),
-            ...(fetchMiddlewares<RequestHandler>(pingController.prototype.get)),
-
-            function pingController_get(request: any, response: any, next: any) {
-            const args = {
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-
-                const controller = new pingController();
-
-
-              const promise = controller.get.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
@@ -257,6 +374,32 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/edit/product',
+            ...(fetchMiddlewares<RequestHandler>(EditProduct)),
+            ...(fetchMiddlewares<RequestHandler>(EditProduct.prototype.EditProduct)),
+
+            function EditProduct_EditProduct(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"ref":"IEditProduct"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new EditProduct();
+
+
+              const promise = controller.EditProduct.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/post/product',
             ...(fetchMiddlewares<RequestHandler>(RegisterProduct)),
             ...(fetchMiddlewares<RequestHandler>(RegisterProduct.prototype.register)),
@@ -264,6 +407,7 @@ export function RegisterRoutes(app: Router) {
             function RegisterProduct_register(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"ref":"RegisterProductBody"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

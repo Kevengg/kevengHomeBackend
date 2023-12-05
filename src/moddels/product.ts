@@ -1,4 +1,4 @@
-import { ImageLink } from "@prisma/client";
+import ImageLinkConnection from "./imgLink";
 
 export default interface Product {
     id: number;
@@ -12,5 +12,5 @@ export default interface Product {
     activeFrom: Date | null;
     created: Date;
     priceBreakdown: string | null;
-    ImageLinks: ImageLink[];
+    ImageConnections: ImageLinkConnection[];
 }

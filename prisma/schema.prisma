@@ -8,24 +8,61 @@ datasource db {
 }
 
 model ImageLink {
-  id          Int       @id @default(autoincrement())
+  id          Int                  @id @default(autoincrement())
   link        String
   descripiton String
-  Product     Product[]
+  connection  ImageLinkConnection?
+}
+
+model ImageLinkConnection {
+  imageLinkId Int        @id
+  imageLink   ImageLink  @relation(fields: [imageLinkId], references: [id])
+  woodType    WoodType[]
+  product     Product[]
 }
 
 model Product {
-  id             Int         @id @default(autoincrement())
+  id             Int                   @id @default(autoincrement())
   name           String
   description    String
   price          Int?
   listPrice      Int?
   soldPrice      Int?
-  sold           Boolean     @default(false)
+  sold           Boolean               @default(false)
   soldAt         DateTime?
   activeFrom     DateTime?
-  created        DateTime    @default(now())
+  created        DateTime              @default(now())
   priceBreakdown String?
-  deleted        Boolean     @default(false)
-  ImageLink      ImageLink[]
+  deleted        Boolean               @default(false)
+  ImageLinks     ImageLinkConnection[]
+}
+
+model KnownErrors {
+  id         Int    @id @default(autoincrement())
+  status     Int
+  message    String
+  host       String
+  sorce      String
+  connection String
+  useragent  String
+  referer    String
+}
+
+model CalcSettings {
+  id                Int      @id @default(autoincrement())
+  bowlMultiplier    Decimal  @default(1)
+  lanternMultiplier Decimal  @default(1)
+  baseMultiplier    Decimal  @default(1)
+  profitMargin      Decimal  @default(0)
+  activeFrom        DateTime @default(now())
+}
+
+model WoodType {
+  id               Int                   @id @default(autoincrement())
+  name             String
+  description      String                @default("")
+  basePrice        Int
+  widthMultiplier  Decimal               @default(1.25)
+  lengthMultiplier Decimal               @default(1.25)
+  images           ImageLinkConnection[]
 }

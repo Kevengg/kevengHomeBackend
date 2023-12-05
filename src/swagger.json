@@ -6,6 +6,22 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"ErrorReturn": {
+				"properties": {
+					"error": {
+						"type": "number",
+						"format": "double"
+					},
+					"errorMsg": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"error"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ProductToImageBoddy": {
 				"properties": {
 					"ProductID": {
@@ -66,22 +82,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ErrorReturn": {
-				"properties": {
-					"error": {
-						"type": "number",
-						"format": "double"
-					},
-					"errorMsg": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"error"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"RegisterImageBody": {
 				"properties": {
 					"link": {
@@ -94,6 +94,18 @@
 				"required": [
 					"link",
 					"descripiton"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ImageLinkConnection": {
+				"properties": {
+					"imageLink": {
+						"$ref": "#/components/schemas/ImageLink"
+					}
+				},
+				"required": [
+					"imageLink"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -146,9 +158,9 @@
 						"type": "string",
 						"nullable": true
 					},
-					"ImageLinks": {
+					"ImageConnections": {
 						"items": {
-							"$ref": "#/components/schemas/ImageLink"
+							"$ref": "#/components/schemas/ImageLinkConnection"
 						},
 						"type": "array"
 					}
@@ -165,7 +177,58 @@
 					"activeFrom",
 					"created",
 					"priceBreakdown",
-					"ImageLinks"
+					"ImageConnections"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ProductEditResponse": {
+				"properties": {
+					"before": {
+						"$ref": "#/components/schemas/Product"
+					},
+					"after": {
+						"$ref": "#/components/schemas/Product"
+					}
+				},
+				"required": [
+					"before",
+					"after"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IEditProduct": {
+				"properties": {
+					"ProductID": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"listPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"activeFrom": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"deleted": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"ProductID"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -194,13 +257,27 @@
 						"type": "boolean"
 					},
 					"soldAt": {
-						"type": "string"
+						"type": "string",
+						"format": "date-time"
 					},
 					"activeFrom": {
-						"type": "string"
+						"anyOf": [
+							{
+								"type": "string",
+								"format": "date-time"
+							},
+							{}
+						]
 					},
 					"priceBreakdown": {
 						"type": "string"
+					},
+					"images": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
@@ -226,19 +303,141 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
-		"/relationship/product/image": {
-			"post": {
+		"/errors/known/count": {
+			"get": {
 				"operationId": "",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"properties": {
+										"count": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"count"
+									],
+									"type": "object"
+								}
 							}
 						}
 					}
 				},
+				"tags": [
+					"health check"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/errors/known/{page}": {
+			"get": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"health check"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "page",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/ping": {
+			"get": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"ping": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"ping"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"health check"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/edit/product/image": {
+			"put": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"statusbar": {
+													"type": "string",
+													"enum": [
+														"success"
+													],
+													"nullable": false
+												}
+											},
+											"required": [
+												"statusbar"
+											],
+											"type": "object"
+										},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"edit products"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -253,21 +452,55 @@
 				}
 			}
 		},
-		"/relationship/product/images": {
-			"post": {
+		"/edit/product/images": {
+			"put": {
 				"operationId": "",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"statusbar": {
+													"type": "string",
+													"enum": [
+														"success"
+													],
+													"nullable": false
+												}
+											},
+											"required": [
+												"statusbar"
+											],
+											"type": "object"
+										},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
 							}
 						}
 					}
 				},
+				"tags": [
+					"edit products"
+				],
 				"security": [],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "remove",
+						"required": false,
+						"schema": {
+							"default": false,
+							"type": "boolean"
+						}
+					}
+				],
 				"requestBody": {
 					"required": true,
 					"content": {
@@ -305,8 +538,50 @@
 						}
 					}
 				},
+				"tags": [
+					"get"
+				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/images/{img}": {
+			"get": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ImageLink"
+										},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"get"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "img",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/post/image": {
@@ -329,6 +604,9 @@
 						}
 					}
 				},
+				"tags": [
+					"register"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -341,33 +619,6 @@
 						}
 					}
 				}
-			}
-		},
-		"/ping": {
-			"get": {
-				"operationId": "",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"ping": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"ping"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": []
 			}
 		},
 		"/products/all": {
@@ -395,8 +646,50 @@
 						}
 					}
 				},
+				"tags": [
+					"get"
+				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/edit/product": {
+			"put": {
+				"operationId": "",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ProductEditResponse"
+										},
+										{
+											"$ref": "#/components/schemas/ErrorReturn"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"edit products"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IEditProduct"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/post/product": {
@@ -419,6 +712,9 @@
 						}
 					}
 				},
+				"tags": [
+					"register"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
