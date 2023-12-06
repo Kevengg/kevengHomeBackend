@@ -144,6 +144,48 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "woodBlank": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "sizeX": {"dataType":"double","required":true},
+            "sizeY": {"dataType":"double","required":true},
+            "sizeZ": {"dataType":"double","required":true},
+            "priceMultiplier": {"dataType":"double","required":true},
+            "WoodTypeId": {"dataType":"double","required":true},
+            "images": {"dataType":"array","array":{"dataType":"refObject","ref":"ImageLinkConnection"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "stain": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "name": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
+            "priceSquareMeter": {"dataType":"double","required":true},
+            "images": {"dataType":"array","array":{"dataType":"refObject","ref":"ImageLinkConnection"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "woodType": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "name": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
+            "basePrice": {"dataType":"double","required":true},
+            "widthMultiplier": {"dataType":"double","required":true},
+            "lengthMultiplier": {"dataType":"double","required":true},
+            "images": {"dataType":"array","array":{"dataType":"refObject","ref":"ImageLinkConnection"},"required":true},
+            "woodBlanks": {"dataType":"array","array":{"dataType":"refObject","ref":"woodBlank"}},
+            "stains": {"dataType":"array","array":{"dataType":"refObject","ref":"stain"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "EditWoodTypesBody": {
         "dataType": "refObject",
         "properties": {

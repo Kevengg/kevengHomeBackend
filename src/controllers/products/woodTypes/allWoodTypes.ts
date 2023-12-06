@@ -1,6 +1,7 @@
 import { Controller, Get, Query, Route, Tags } from "tsoa";
 import { db } from "../../../db";
 import { Prisma } from "@prisma/client";
+import woodType from "../../../moddels/woodType";
 
 @Route("/woodtypes")
 export class AllWoodTypes extends Controller {
@@ -9,7 +10,7 @@ export class AllWoodTypes extends Controller {
     public async allWoodTypes(
         @Query() includeBlanks: boolean = false,
         @Query() includeStains: boolean = false,
-    ): Promise<unknown[]> {
+    ): Promise<woodType[]> {
         const vars: Prisma.WoodTypeInclude = {
             images: { include: { imageLink: true } },
         };
@@ -30,6 +31,6 @@ export class AllWoodTypes extends Controller {
             include: vars,
         });
 
-        return woodTypes;
+        return woodTypes as unknown[] as woodType[];
     }
 }

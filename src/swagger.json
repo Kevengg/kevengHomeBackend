@@ -288,6 +288,139 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"woodBlank": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"sizeX": {
+						"type": "number",
+						"format": "double"
+					},
+					"sizeY": {
+						"type": "number",
+						"format": "double"
+					},
+					"sizeZ": {
+						"type": "number",
+						"format": "double"
+					},
+					"priceMultiplier": {
+						"type": "number",
+						"format": "double"
+					},
+					"WoodTypeId": {
+						"type": "number",
+						"format": "double"
+					},
+					"images": {
+						"items": {
+							"$ref": "#/components/schemas/ImageLinkConnection"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"sizeX",
+					"sizeY",
+					"sizeZ",
+					"priceMultiplier",
+					"WoodTypeId",
+					"images"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"stain": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"priceSquareMeter": {
+						"type": "number",
+						"format": "double"
+					},
+					"images": {
+						"items": {
+							"$ref": "#/components/schemas/ImageLinkConnection"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"priceSquareMeter",
+					"images"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"woodType": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"basePrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"widthMultiplier": {
+						"type": "number",
+						"format": "double"
+					},
+					"lengthMultiplier": {
+						"type": "number",
+						"format": "double"
+					},
+					"images": {
+						"items": {
+							"$ref": "#/components/schemas/ImageLinkConnection"
+						},
+						"type": "array"
+					},
+					"woodBlanks": {
+						"items": {
+							"$ref": "#/components/schemas/woodBlank"
+						},
+						"type": "array"
+					},
+					"stains": {
+						"items": {
+							"$ref": "#/components/schemas/stain"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"basePrice",
+					"widthMultiplier",
+					"lengthMultiplier",
+					"images"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"EditWoodTypesBody": {
 				"properties": {
 					"id": {
@@ -824,7 +957,9 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {},
+									"items": {
+										"$ref": "#/components/schemas/woodType"
+									},
 									"type": "array"
 								}
 							}
