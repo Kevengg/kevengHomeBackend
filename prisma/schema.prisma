@@ -15,11 +15,12 @@ model ImageLink {
 }
 
 model ImageLinkConnection {
-  imageLinkId Int        @id
-  imageLink   ImageLink  @relation(fields: [imageLinkId], references: [id])
+  imageLinkId Int         @id
+  imageLink   ImageLink   @relation(fields: [imageLinkId], references: [id])
   woodType    WoodType[]
   product     Product[]
   Stain       Stain[]
+  WoodBlank   WoodBlank[]
 }
 
 model Product {
@@ -50,12 +51,12 @@ model KnownErrors {
 }
 
 model CalcSettings {
-  id                Int      @id @default(autoincrement())
-  bowlMultiplier    Decimal  @default(1)
-  lanternMultiplier Decimal  @default(1)
-  baseMultiplier    Decimal  @default(1)
-  profitMargin      Decimal  @default(0)
-  activeFrom        DateTime @default(now())
+  id                Int       @id @default(autoincrement())
+  bowlMultiplier    Decimal   @default(1)
+  lanternMultiplier Decimal   @default(1)
+  baseMultiplier    Decimal   @default(1)
+  profitMargin      Decimal   @default(0)
+  activeFrom        DateTime? @default(now())
 }
 
 model WoodType {
@@ -67,6 +68,7 @@ model WoodType {
   lengthMultiplier Decimal               @default(1.25)
   images           ImageLinkConnection[]
   stains           Stain[]
+  woodBlanks       WoodBlank[]
 }
 
 model Stain {
@@ -76,4 +78,15 @@ model Stain {
   priceSquareMeter Decimal
   images           ImageLinkConnection[]
   woodTypes        WoodType[]
+}
+
+model WoodBlank {
+  id              Int                   @id @default(autoincrement())
+  sizeX           Int
+  sizeY           Int
+  sizeZ           Int
+  priceMultiplier Decimal               @default(1)
+  type            WoodType              @relation(fields: [WoodTypeId], references: [id])
+  images          ImageLinkConnection[]
+  WoodTypeId      Int
 }
