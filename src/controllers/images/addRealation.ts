@@ -53,8 +53,8 @@ export class AddRealationship extends Controller {
         }
 
         // check if the selected image exists
-        const selectedImage = await db.imageLink.findFirst({
-            where: { id: { equals: body.ImageID } },
+        const selectedImage = await db.imageLinkConnection.findFirst({
+            where: { imageLinkId: { equals: body.ImageID } },
         });
         if (!selectedImage) {
             return err({
@@ -121,8 +121,8 @@ export class AddRealationship extends Controller {
         }
 
         // check if the selected image exists
-        const selectedImages = await db.imageLink.findMany({
-            where: { id: { in: body.ImageIDs } },
+        const selectedImages = await db.imageLinkConnection.findMany({
+            where: { imageLinkId: { in: body.ImageIDs } },
         });
 
         if (selectedImages.length !== body.ImageIDs.length) {
