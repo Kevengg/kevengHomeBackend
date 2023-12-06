@@ -474,6 +474,8 @@ export function RegisterRoutes(app: Router) {
 
             function AllWoodTypes_allWoodTypes(request: any, response: any, next: any) {
             const args = {
+                    includeBlanks: {"default":false,"in":"query","name":"includeBlanks","dataType":"boolean"},
+                    includeStains: {"default":false,"in":"query","name":"includeStains","dataType":"boolean"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
